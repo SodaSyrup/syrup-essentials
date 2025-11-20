@@ -1,13 +1,13 @@
-package net.cozystudios.cozystudiosessentials.command;
+package net.syrupstudios.syrupessentials.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import net.cozystudios.cozystudiosessentials.CozyStudiosEssentials;
-import net.cozystudios.cozystudiosessentials.data.PlayerData;
-import net.cozystudios.cozystudiosessentials.util.TeleportUtil;
+import net.syrupstudios.syrupessentials.SyrupEssentials;
+import net.syrupstudios.syrupessentials.data.PlayerData;
+import net.syrupstudios.syrupessentials.util.TeleportUtil;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -20,7 +20,7 @@ public class HomeCommand {
     private static final SuggestionProvider<ServerCommandSource> HOME_SUGGESTIONS = (context, builder) -> {
         try {
             ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-            PlayerData data = CozyStudiosEssentials.getPlayerDataManager().getPlayerData(player);
+            PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
 
             // Add all home names as suggestions
             for (String homeName : data.getHomes().keySet()) {
@@ -59,7 +59,7 @@ public class HomeCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         String homeName = StringArgumentType.getString(context, "name");
 
-        PlayerData data = CozyStudiosEssentials.getPlayerDataManager().getPlayerData(player);
+        PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
 
         // Check if home already exists
         boolean isUpdate = data.getHome(homeName) != null;
@@ -73,7 +73,7 @@ public class HomeCommand {
 
         // Add the home
         data.addHome(homeName, player);
-        CozyStudiosEssentials.getPlayerDataManager().savePlayerData(player);
+        SyrupEssentials.getPlayerDataManager().savePlayerData(player);
 
         if (isUpdate) {
             player.sendMessage(Text.literal("Home '" + homeName + "' updated!").formatted(Formatting.GREEN), false);
@@ -89,7 +89,7 @@ public class HomeCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         String homeName = StringArgumentType.getString(context, "name");
 
-        PlayerData data = CozyStudiosEssentials.getPlayerDataManager().getPlayerData(player);
+        PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
         PlayerData.HomeData home = data.getHome(homeName);
 
         if (home == null) {
@@ -113,10 +113,10 @@ public class HomeCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         String homeName = StringArgumentType.getString(context, "name");
 
-        PlayerData data = CozyStudiosEssentials.getPlayerDataManager().getPlayerData(player);
+        PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
 
         if (data.removeHome(homeName)) {
-            CozyStudiosEssentials.getPlayerDataManager().savePlayerData(player);
+            SyrupEssentials.getPlayerDataManager().savePlayerData(player);
             player.sendMessage(Text.literal("Home '" + homeName + "' deleted!").formatted(Formatting.GREEN), false);
             return 1;
         } else {
@@ -127,7 +127,7 @@ public class HomeCommand {
 
     private static int listHomes(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-        PlayerData data = CozyStudiosEssentials.getPlayerDataManager().getPlayerData(player);
+        PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
 
         if (data.getHomeCount() == 0) {
             player.sendMessage(Text.literal("You don't have any homes set!").formatted(Formatting.YELLOW), false);

@@ -1,14 +1,14 @@
-package net.cozystudios.cozystudiosessentials;
+package net.syrupstudios.syrupessentials;
 
-import net.cozystudios.cozystudiosessentials.command.HomeCommand;
-import net.cozystudios.cozystudiosessentials.data.PlayerDataManager;
+import net.syrupstudios.syrupessentials.command.HomeCommand;
+import net.syrupstudios.syrupessentials.data.PlayerDataManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CozyStudiosEssentials implements ModInitializer {
+public class SyrupEssentials implements ModInitializer {
     public static final String MOD_ID = "cozystudiosessentials";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 

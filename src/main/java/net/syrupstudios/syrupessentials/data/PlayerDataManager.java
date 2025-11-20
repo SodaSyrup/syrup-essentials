@@ -1,6 +1,5 @@
-package net.cozystudios.cozystudiosessentials.data;
+package net.syrupstudios.syrupessentials.data;
 
-import net.cozystudios.cozystudiosessentials.CozyStudiosEssentials;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.server.MinecraftServer;
@@ -43,7 +42,7 @@ public class PlayerDataManager {
             dataDirectory.mkdirs();
         }
 
-        CozyStudiosEssentials.LOGGER.info("Player data directory: {}", dataDirectory.getAbsolutePath());
+        net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.info("Player data directory: {}", dataDirectory.getAbsolutePath());
     }
 
     public PlayerData getPlayerData(UUID uuid) {
@@ -63,7 +62,7 @@ public class PlayerDataManager {
                 NbtCompound nbt = StringNbtReader.parse(snbtContent);
                 return PlayerData.fromNbt(nbt);
             } catch (Exception e) {
-                CozyStudiosEssentials.LOGGER.error("Failed to load player data for " + uuid, e);
+                net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.error("Failed to load player data for " + uuid, e);
             }
         }
 
@@ -85,7 +84,7 @@ public class PlayerDataManager {
                 writer.write(snbtContent);
             }
         } catch (IOException e) {
-            CozyStudiosEssentials.LOGGER.error("Failed to save player data for " + uuid, e);
+            net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.error("Failed to save player data for " + uuid, e);
         }
     }
 
@@ -94,7 +93,7 @@ public class PlayerDataManager {
     }
 
     public void saveAll() {
-        CozyStudiosEssentials.LOGGER.info("Saving all player data...");
+        net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.info("Saving all player data...");
         for (UUID uuid : playerDataMap.keySet()) {
             savePlayerData(uuid);
         }

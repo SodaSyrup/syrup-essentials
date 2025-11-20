@@ -17,7 +17,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.cozystudios.cozystudiosessentials.CozyStudiosEssentials"
+          "net.cozystudios.cozystudiosessentials.SyrupEssentials"
 		]
 	},
 	"mixins": [],

@@ -1,4 +1,4 @@
-package net.cozystudios.cozystudiosessentials.data;
+package net.syrupstudios.syrupessentials.data;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;

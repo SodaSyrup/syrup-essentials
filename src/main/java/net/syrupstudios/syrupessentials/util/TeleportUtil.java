@@ -1,6 +1,6 @@
-package net.cozystudios.cozystudiosessentials.util;
+package net.syrupstudios.syrupessentials.util;
 
-import net.cozystudios.cozystudiosessentials.data.PlayerData;
+import net.syrupstudios.syrupessentials.data.PlayerData;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,7 +23,7 @@ public class TeleportUtil {
             }
 
             // Save current position for /back
-            PlayerData data = net.cozystudios.cozystudiosessentials.CozyStudiosEssentials
+            PlayerData data = net.syrupstudios.syrupessentials.SyrupEssentials
                     .getPlayerDataManager().getPlayerData(player);
             data.setLastPosition(
                     player.getPos(),
@@ -51,7 +51,7 @@ public class TeleportUtil {
                                          double x, double y, double z, float yaw, float pitch) {
         try {
             // Save current position for /back
-            PlayerData data = net.cozystudios.cozystudiosessentials.CozyStudiosEssentials
+            PlayerData data = net.syrupstudios.syrupessentials.SyrupEssentials
                     .getPlayerDataManager().getPlayerData(player);
             data.setLastPosition(
                     player.getPos(),
