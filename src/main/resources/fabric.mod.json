@@ -1,11 +1,10 @@
 {
 	"schemaVersion": 1,
-	"id": "cozystudios-essentials",
+	"id": "syrup-essentials",
 	"version": "${version}",
-	"name": "CozyStudios Essentials",
+	"name": "Syrup Essentials",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"CozyStudios",
         "Salad"
 	],
 	"contact": {

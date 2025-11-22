@@ -28,7 +28,7 @@ loom {
     }
 
 	mods {
-		"cozystudios-essentials" {
+		"syrup-essentials" {
 			sourceSet sourceSets.main
 		}
 	}
