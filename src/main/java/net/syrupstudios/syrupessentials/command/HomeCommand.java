@@ -135,7 +135,7 @@ public class HomeCommand {
         }
 
         player.sendMessage(Text.literal("Your homes (" + data.getHomeCount() + "/" +
-                data.getMaxHomes() + "):").formatted(Formatting.GOLD), false);
+                data.getMaxHomes() + "):").formatted(Formatting.GOLD), true);
 
         for (String homeName : data.getHomes().keySet()) {
             player.sendMessage(Text.literal("  - " + homeName).formatted(Formatting.AQUA), false);

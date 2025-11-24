@@ -4,6 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.WorldSavePath;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,24 +20,7 @@ public class PlayerDataManager {
 
     public PlayerDataManager(MinecraftServer server) {
         this.playerDataMap = new HashMap<>();
-
-        // Save in the world folder: <world>/syrup_essential_data/
-        // Get the world directory from the overworld
-        File worldDirectory = server.getRunDirectory();
-        if (server.getOverworld() != null) {
-            worldDirectory = server.getOverworld().getServer().getRunDirectory();
-        }
-
-        // Navigate to saves/<world_name>/syrup_essential_data
-        File savesDir = new File(worldDirectory, "saves");
-        if (server.getSaveProperties() != null) {
-            String worldName = server.getSaveProperties().getLevelName();
-            File worldDir = new File(savesDir, worldName);
-            this.dataDirectory = new File(worldDir, "syrup_essential_data");
-        } else {
-            // Fallback
-            this.dataDirectory = new File(worldDirectory, "syrup_essential_data");
-        }
+        this.dataDirectory = server.getSavePath(WorldSavePath.ROOT).resolve("syrup_essential_data").toFile();
 
         if (!dataDirectory.exists()) {
             dataDirectory.mkdirs();
@@ -60,7 +44,7 @@ public class PlayerDataManager {
             try {
                 String snbtContent = Files.readString(playerFile.toPath());
                 NbtCompound nbt = StringNbtReader.parse(snbtContent);
-                return PlayerData.fromNbt(nbt);
+                return PlayerData.fromNbt(uuid, nbt);
             } catch (Exception e) {
                 net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.error("Failed to load player data for " + uuid, e);
             }
@@ -77,9 +61,8 @@ public class PlayerDataManager {
 
         try {
             NbtCompound nbt = data.toNbt();
-            String snbtContent = nbt.asString(); // Convert to SNBT string
+            String snbtContent = formatNbt(nbt);
 
-            // Write to file with nice formatting
             try (FileWriter writer = new FileWriter(playerFile)) {
                 writer.write(snbtContent);
             }
@@ -96,6 +79,92 @@ public class PlayerDataManager {
         net.syrupstudios.syrupessentials.SyrupEssentials.LOGGER.info("Saving all player data...");
         for (UUID uuid : playerDataMap.keySet()) {
             savePlayerData(uuid);
+        }
+    }
+
+    private String formatNbt(NbtCompound nbt) {
+        String snbt = nbt.asString();
+        StringBuilder formatted = new StringBuilder();
+        int indent = 0;
+        int listDepth = 0;
+        int compactDepth = 0;
+        boolean inQuote = false;
+        char lastChar = 0;
+
+        for (int i = 0; i < snbt.length(); i++) {
+            char c = snbt.charAt(i);
+
+            if (c == '"' && lastChar != '\\') {
+                inQuote = !inQuote;
+            }
+
+            if (!inQuote) {
+                if (compactDepth > 0) {
+                    if (c == '}' || c == ']') {
+                        compactDepth--;
+                        formatted.append(c);
+                    } else if (c == '{' || c == '[') {
+                        compactDepth++;
+                        formatted.append(c);
+                    } else if (c == ',') {
+                        formatted.append(", ");
+                    } else if (c == ':') {
+                        formatted.append(": ");
+                    } else {
+                        formatted.append(c);
+                    }
+                }
+                else {
+                    if (c == '{') {
+                        if (listDepth > 0) {
+                            compactDepth = 1;
+                            formatted.append(c);
+                        } else {
+                            formatted.append("{\n");
+                            indent++;
+                            appendIndent(formatted, indent);
+                        }
+                    } else if (c == '[') {
+                        if (i + 2 < snbt.length() && snbt.charAt(i + 2) == ';') {
+                            compactDepth = 1;
+                            formatted.append(c);
+                        } else {
+                            formatted.append("[\n");
+                            indent++;
+                            listDepth++;
+                            appendIndent(formatted, indent);
+                        }
+                    } else if (c == '}') {
+                        formatted.append("\n");
+                        indent--;
+                        appendIndent(formatted, indent);
+                        formatted.append(c);
+                    } else if (c == ']') {
+                        formatted.append("\n");
+                        indent--;
+                        listDepth--;
+                        appendIndent(formatted, indent);
+                        formatted.append(c);
+                    } else if (c == ',') {
+                        formatted.append(",\n");
+                        appendIndent(formatted, indent);
+                    } else if (c == ':') {
+                        formatted.append(": ");
+                    } else {
+                        formatted.append(c);
+                    }
+                }
+            } else {
+                formatted.append(c);
+            }
+            lastChar = c;
+        }
+        return formatted.toString();
+    }
+
+    private void appendIndent(StringBuilder sb, int indent) {
+        for (int i = 0; i < indent; i++) {
+            sb.append("  ");
         }
     }
 }
