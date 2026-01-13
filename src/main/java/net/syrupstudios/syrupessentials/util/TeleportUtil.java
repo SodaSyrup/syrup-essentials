@@ -1,6 +1,7 @@
 package net.syrupstudios.syrupessentials.util;
 
 import net.syrupstudios.syrupessentials.data.PlayerData;
+import net.syrupstudios.syrupessentials.data.HomeData; // Added import
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -11,10 +12,10 @@ import net.minecraft.world.World;
 
 public class TeleportUtil {
 
-    public static boolean teleportPlayer(ServerPlayerEntity player, PlayerData.HomeData home) {
+    public static boolean teleportPlayer(ServerPlayerEntity player, HomeData home) {
         try {
             // Get the target world
-            Identifier dimensionId = new Identifier(home.getDimension());
+            Identifier dimensionId = new Identifier(home.dimension());
             RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, dimensionId);
             ServerWorld targetWorld = player.getServer().getWorld(worldKey);
 
@@ -33,11 +34,11 @@ public class TeleportUtil {
             // Teleport the player
             player.teleport(
                     targetWorld,
-                    home.getX(),
-                    home.getY(),
-                    home.getZ(),
-                    home.getYaw(),
-                    home.getPitch()
+                    home.x(),
+                    home.y(),
+                    home.z(),
+                    home.yaw(),
+                    home.pitch()
             );
 
             return true;

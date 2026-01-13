@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.syrupstudios.syrupessentials.SyrupEssentials;
 import net.syrupstudios.syrupessentials.data.PlayerData;
+import net.syrupstudios.syrupessentials.data.HomeData;
 import net.syrupstudios.syrupessentials.util.TeleportUtil;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -90,7 +91,7 @@ public class HomeCommand {
         String homeName = StringArgumentType.getString(context, "name");
 
         PlayerData data = SyrupEssentials.getPlayerDataManager().getPlayerData(player);
-        PlayerData.HomeData home = data.getHome(homeName);
+        HomeData home = data.getHome(homeName);
 
         if (home == null) {
             player.sendMessage(Text.literal("Home '" + homeName + "' not found!").formatted(Formatting.RED), true);
